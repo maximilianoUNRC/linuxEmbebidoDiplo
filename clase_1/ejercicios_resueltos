@@ -69,7 +69,6 @@ Resolucion :
 11. Mostrar en pantalla los archivos cuya penúltima letra sea la letra v
 Resolucion:
     asus@asus-K53SC ~/Escritorio/linux_Embebed/practico/dir3/antiguos $ ls | grep 'v.\>'
-
     asus@asus-K53SC ~/Escritorio/linux_Embebed/practico/dir3/antiguos $ ls *v?
 
 *******************************************************************************************************************
@@ -83,7 +82,17 @@ Resolucion:
     asus@asus-K53SC ~/Escritorio/linux_Embebed/practico $ chmod 764 dir3
 
 *******************************************************************************************************************
-14. Cambie la máscara para que quede rw-r-----16. Borre los archivos del directorio antiguos
+14. Cambie la máscara para que quede rw-r----- 16. Borre los archivos del directorio antiguos
+asus@asus-K53SC ~ $ chmod 640 antiguos/
+asus@asus-K53SC ~ $ sudo ls -l antiguos/
+[sudo] password for asus: 
+total 4
+-rw-r--r-- 1 asus asus 18 sep 11 15:15 test.txt
+-rw-r--r-- 1 asus asus  0 sep 11 15:13 test.txt~
+asus@asus-K53SC ~ $ cd ./antiguos/
+bash: cd: ./permisos/: Permiso denegado
+
+"Por lo tanto no se puede borrar el directorio"
 
 *******************************************************************************************************************
 15. Cambiar el nombre del directorio dir2 a dir_2
@@ -110,6 +119,14 @@ Resolucion:
 comandos: ls, cp, man, type, alias
 Resolucion:
         asus@asus-K53SC ~ $ type cp
+		cp is /bin/cp
+		asus@asus-K53SC ~ $ type ls
+		ls es un alias de `ls --color=auto`
+		asus@asus-K53SC ~ $ type man
+		man is /usr/bin/man
+		asus@asus-K53SC ~ $ type alias
+		alias es una orden interna del shell
+
 
 *******************************************************************************************************************
 20. Escribir los comandos que realicen las siguientes tareas:
@@ -141,14 +158,13 @@ asus@asus-K53SC ~/prueba  $ chmod +w ejer21b.txt   "No permite la lectura por ni
 asus@asus-K53SC ~/prueba  $ touch temp.txt && cat ejer21b.txt |sort > temp.txt && cat /dev/null > ejer21b.txt && cat temp.txt > ejer21b.txt && rm temp.txt
 
 *******************************************************************************************************************
-22. Cambie los permisos del archivo: ("VER")
-    -rw-r--r-- 1 Usuario Users 150 Jul 1 15:00
+22. Cambie los permisos del archivo:  -rw-r--r-- 1 Usuario Users 150 Jul 1 15:00
     • Permisos de lectura y escritura para todos.
+    	chmod 666 [file]
     • Quitar todos los permisos para el grupo y otros.
+    	chmod 700 [file]
     • Que implican los permisos originales? 
-Resolucion:
-
-
+    	??
 
 *******************************************************************************************************************
 23. Cual es la salida correcta devuelta por Linux para el siguiente conjunto de comandos:
@@ -194,6 +210,7 @@ Resolucion:
 direccionamiento absoluto y sin cambiar de directorio, el archivo backup01.txt, mueva el
 archivo sistema.txt al subdirectorio marzo y copie el archivo usuarios.txt al subdirectorio
 febrero.
+	(No realizar)
 ******************************************************************************************************************
 27. Crear el directorio dir2 y dir3 en otro directorio PRUEBA. Cuales son los permisos del
 directorio dir2?
@@ -214,7 +231,6 @@ Resolucion:
    asus@asus-K53SC ~/prueba  $ ls -l
    total 40
    dr-xr-xr-x 2 asus asus 4096 oct 12 11:07 dir2
-
 
 ******************************************************************************************************************
 29. Utilizando la notación octal, eliminar el permiso de lectura del directorio dir2, al resto de
@@ -257,9 +273,8 @@ Resolucion:
 
 *****************************************************************************************************************
 34. Cambiar el directorio actual al directorio dir3. Imprimir su trayectoria completa para verificar el cambio.
-
 Resolucion:
-    "Ver"    
+    tree [dir_Actual]   
 
 *****************************************************************************************************************
 35. Cuáles son los permisos asignados en su momento a este directorio?
@@ -297,7 +312,7 @@ Resolucion:
 ****************************************************************************************************************
 39. Posicionarse en dir2 y, empleando el enlace creado en el ejercicio , crear el directorio
 nuevo1 de dir1. Verifique los inodos de los directorios y enlaces creados.
-    "VER"
+     (No realizar)
 ***************************************************************************************************************
 40. Utilizando el enlace creado copiar los archivos que empiecen por u del /bin directorio
 nuevo1.
@@ -382,7 +397,7 @@ asus      3908  0.0  0.0   8560  3684 pts/2    Ss   09:18   0:05 bash
 asus      6441  0.0  0.0   6500  1196 pts/2    R+   12:32   0:00 ps au
 
 • ¿Qué número de proceso tiene el shell de root?
-    "VER"
+    3908
 • Use las opciones –A, u, –u usuario y otras opciones
     ps au 
 • Explique lo observado
