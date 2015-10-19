@@ -444,7 +444,10 @@ Ahora queremos volver a poner en funcionamiento :
 
 *************************************************************************************************************
 51. Elimine las tareas del ejercicio No 28 47 el número de jobs, y pid.
-"VER"
+
+    kill %1
+    kill 3191
+
 
 
 
