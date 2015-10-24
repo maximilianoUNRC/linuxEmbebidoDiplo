@@ -192,7 +192,33 @@ Luego, hacer accesible vía Web, mediante el uso de un navegador.
 Nota: Usar el la entrada D4 y A0 del Shield de expansión. Además escribir 
 dentro del la carpeta /www/pages/
 
-https://github.com/janunezc/GALILEO/wiki/Simple-Web-Server---GPIO-Hardware-Control
+#!/bin/ash
+#local var
+local lectura variable msg_init msg_finish refresh
+#Inicializacion de estados
+lectura=0
+variable=""
+refresh="<head><meta http-equiv=\"refresh\" content=\"1\"></head>"
+msg_init="<html><body><h1>"
+msg_finish="</h1></body></html>"
+echo -n "37" > /sys/class/gpio/export
+echo -n "out" > /sys/class/gpio/gpio37/direction
+echo -n "0" > /sys/class/gpio/gpio37/value #LOW
+echo -n "28" > /sys/class/gpio/export
+echo -n "in" > /sys/class/gpio/gpio28/direction
+#iteracion de actuacion
+while true
+do 
+	lectura=$(cat /sys/bus/iio/devices/iio\:device0/in_voltage0_raw)
+	if [ $(cat /sys/class/gpio/gpio28/value) = 1 ]
+	then
+		variable="ON" 
+	else
+		variable="OFF"
+	fi
+		echo ${msg_init} ${refresh} "Button State :" ${variable} "Lectura LDR :" ${lectura} ${msg_finish} > /www/pages/index.html
+done
+
 
 
 
