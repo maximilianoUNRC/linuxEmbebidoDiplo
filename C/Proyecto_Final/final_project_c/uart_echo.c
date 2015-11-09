@@ -54,7 +54,6 @@ void UARTIntHandler(void) {
 			if (command[i] == '*') {
 				stringComplete = 1;
 			}
-
 			i++;
 		}
 
@@ -62,56 +61,36 @@ void UARTIntHandler(void) {
 			i = 0;
 			if (command[0] == my_Id) {
 				stringComplete = 0;
-				i = 0;
 				char opc = command[2];
 				switch (opc) {
 				case 'B':
 					ok = 1;
 					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
 					} else {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 					}
 					break;
 				case 'R':
 					ok = 1;
 					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
 					} else {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
 					}
 					break;
 				case 'G':
 					ok = 1;
 					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
 					} else {
-						//
-						// Turn off the LED
-						//
 						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0);
 					}
 					break;
 				default:
 					break;
-				}
+				}//Switch
 
-				i = 0;
 				int j = 0;
 				if (ok) {
 					while (msg_ack[j] != '0') {
@@ -130,105 +109,91 @@ void UARTIntHandler(void) {
 			// tratamineto  de mensajes a la Otra TIVA por el UART1...
 			while(command[j] != '0'){
 				ROM_UARTCharPutNonBlocking(UART1_BASE, command[j]);
+				j++;
+			}
+			j = 0;
+			while (msg_nack[j] != '0') {
+				ROM_UARTCharPutNonBlocking(UART0_BASE, msg_nack[j]);
+				j++;
 			}
 			memset(command, 0x00, 6);
 		}
-	}
-
+	}//fin_msg_complete
 }
 
 //---------------------------------------------------------------------------------
 void UART1IntHandler(void){
 	// mismo tratamiento de msg
-		uint32_t ui32Status;
-		int stringComplete = 0;
-		int ok = 0;
+	uint32_t ui32Status;
+	int stringComplete = 0;
+	int ok = 0;
 
-		ui32Status = ROM_UARTIntStatus(UART1_BASE, true);
-		ROM_UARTIntClear(UART1_BASE, ui32Status);
+	ui32Status = ROM_UARTIntStatus(UART1_BASE, true);
+	ROM_UARTIntClear(UART1_BASE, ui32Status);
 
-		while (ROM_UARTCharsAvail(UART1_BASE)) {
-			command[i] = (char) ROM_UARTCharGetNonBlocking(UART1_BASE);
+	while (ROM_UARTCharsAvail(UART1_BASE)) {
+		command[i] = (char) ROM_UARTCharGetNonBlocking(UART1_BASE);
 
-			if (command[i] == '*') {
-				stringComplete = 1;
-			}
-
-			i++;
+		if (command[i] == '*') {
+			stringComplete = 1;
 		}
 
-		if (stringComplete) {
-			i = 0;
-			if (command[0] == my_Id) {
-				stringComplete = 0;
-				i = 0;
-				char opc = command[2];
-				switch (opc) {
-				case 'B':
-					ok = 1;
-					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
-					} else {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
-					}
-					break;
-				case 'R':
-					ok = 1;
-					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
-					} else {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
-					}
-					break;
-				case 'G':
-					ok = 1;
-					if (command[4] == 'U') {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
-					} else {
-						//
-						// Turn off the LED
-						//
-						GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0);
-					}
-					break;
-				default:
-					break;
-				}
+		i++;
+	}
 
-				i = 0;
-				int j = 0;
-				if (ok) {
-					while (msg_ack[j] != '0') {
-						ROM_UARTCharPutNonBlocking(UART0_BASE, msg_ack[j]);
-						j++;
-					}
+	if (stringComplete) {
+		i = 0;
+		if (command[0] == my_Id) {
+			stringComplete = 0;
+
+			char opc = command[2];
+			switch (opc) {
+			case 'B':
+				ok = 1;
+				if (command[4] == 'U') {
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
 				} else {
-					while (msg_nack[j] != '0') {
-						ROM_UARTCharPutNonBlocking(UART0_BASE, msg_nack[j]);
-						j++;
-					}
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 				}
+				break;
+			case 'R':
+				ok = 1;
+				if (command[4] == 'U') {
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
+				} else {
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0);
+				}
+				break;
+			case 'G':
+				ok = 1;
+				if (command[4] == 'U') {
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
+				} else {
+					GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0);
+				}
+				break;
+			default:
+				break;
+			}
+
+			int j = 0;
+			if (ok) {
+				while (msg_ack[j] != '0') {
+					ROM_UARTCharPutNonBlocking(UART0_BASE, msg_ack[j]);
+					j++;
+				}
+			} else {
+				while (msg_nack[j] != '0') {
+					ROM_UARTCharPutNonBlocking(UART0_BASE, msg_nack[j]);
+					j++;
+				}
+			}
 			memset(command, 0x00, 6);
 		}else {
 			int j = 0;
-			// tratamineto  de mensajes a la Otra TIVA por el UART1...
-			while(command[j] != '*'){
-				ROM_UARTCharPutNonBlocking(UART1_BASE, command[j]);
+			while (msg_nack[j] != '0') {
+				ROM_UARTCharPutNonBlocking(UART0_BASE, msg_nack[j]);
+				j++;
 			}
 			memset(command, 0x00, 6);
 		}
@@ -337,14 +302,14 @@ int main(void) {
 
 	// Prompt for text to be entered.
 	//
-
+//*******************************************************************
 	// seteo de
 	UARTSend((uint8_t *) "Ingrese ID: ", 12);
 	while(my_Id == '0'){
 		my_Id = (char) ROM_UARTCharGet(UART0_BASE);
 	}
 	ROM_UARTCharPut(UART0_BASE, my_Id);
-
+//******************************************************************
 	//
 	// Enable processor interrupts.
 	//
@@ -354,6 +319,6 @@ int main(void) {
 	//
 	// Loop forever echoing data through the UART.
 	//
-	while (1) {
-	}
+	while (1) {}
+
 }
